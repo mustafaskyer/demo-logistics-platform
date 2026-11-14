@@ -4,6 +4,7 @@ import { z } from "zod";
 import { currentTenant } from "@app/platform/tenant.js";
 import invalidTransition from "@app/services/fleet/errors/invalid-status-transition.error.js";
 import vehicleNotFound from "@app/services/fleet/errors/vehicle-not-found.error.js";
+import vehicleStatus from "@app/services/fleet/channels/vehicle-status.channel.js";
 import vehicleStatusChanged from "@app/services/fleet/events/vehicle-status-changed.event.js";
 import { toVehicle, vehicleSchema } from "@app/services/fleet/schemas.js";
 
@@ -13,7 +14,7 @@ export default defineFunction({
   input: z.object({ vehicleId: z.string().min(1), status: z.enum(["active", "maintenance"]) }),
   output: vehicleSchema,
   errors: [vehicleNotFound, invalidTransition],
-  dependencies: { events: { vehicleStatusChanged } },
+  dependencies: { events: { vehicleStatusChanged }, channels: { vehicleStatus } },
   handler: async ({ vehicleId, status }, context) => {
     const { organizationId } = await currentTenant(context.auth);
     const current = await context.database.vehicle.findOne({ where: { id: vehicleId, organizationId } });
@@ -33,6 +34,11 @@ export default defineFunction({
       to: status,
       at: updated.updatedAt.toISOString(),
     });
+    await context.channels.vehicleStatus.trigger(
+      { companyId: organizationId },
+      "changed",
+      { vehicleId, from: current.status, to: status, at: updated.updatedAt.toISOString() },
+    );
     return toVehicle(updated);
   },
 });
