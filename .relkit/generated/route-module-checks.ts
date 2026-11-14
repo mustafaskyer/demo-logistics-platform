@@ -4,8 +4,72 @@
 import type { RouteModuleContract } from "relkit/routes";
 type AssertModule<Expected, Actual extends Expected> = Actual;
 
+// src/routes/documents/[documentId]/confirm/route.ts
+type Route0 = typeof import("../../src/routes/documents/[documentId]/confirm/route.js");
+export type CheckRoute0 = AssertModule<RouteModuleContract<Route0, "documentId">, Route0>;
+
+// src/routes/documents/[documentId]/download/route.ts
+type Route1 = typeof import("../../src/routes/documents/[documentId]/download/route.js");
+export type CheckRoute1 = AssertModule<RouteModuleContract<Route1, "documentId">, Route1>;
+
+// src/routes/documents/[documentId]/route.ts
+type Route2 = typeof import("../../src/routes/documents/[documentId]/route.js");
+export type CheckRoute2 = AssertModule<RouteModuleContract<Route2, "documentId">, Route2>;
+
+// src/routes/documents/route.ts
+type Route3 = typeof import("../../src/routes/documents/route.js");
+export type CheckRoute3 = AssertModule<RouteModuleContract<Route3>, Route3>;
+
+// src/routes/driver-assignments/route.ts
+type Route4 = typeof import("../../src/routes/driver-assignments/route.js");
+export type CheckRoute4 = AssertModule<RouteModuleContract<Route4>, Route4>;
+
+// src/routes/drivers/[driverId]/activate/route.ts
+type Route5 = typeof import("../../src/routes/drivers/[driverId]/activate/route.js");
+export type CheckRoute5 = AssertModule<RouteModuleContract<Route5, "driverId">, Route5>;
+
+// src/routes/drivers/[driverId]/deactivate/route.ts
+type Route6 = typeof import("../../src/routes/drivers/[driverId]/deactivate/route.js");
+export type CheckRoute6 = AssertModule<RouteModuleContract<Route6, "driverId">, Route6>;
+
+// src/routes/drivers/[driverId]/route.ts
+type Route7 = typeof import("../../src/routes/drivers/[driverId]/route.js");
+export type CheckRoute7 = AssertModule<RouteModuleContract<Route7, "driverId">, Route7>;
+
+// src/routes/drivers/[driverId]/vehicle/route.ts
+type Route8 = typeof import("../../src/routes/drivers/[driverId]/vehicle/route.js");
+export type CheckRoute8 = AssertModule<RouteModuleContract<Route8, "driverId">, Route8>;
+
+// src/routes/drivers/route.ts
+type Route9 = typeof import("../../src/routes/drivers/route.js");
+export type CheckRoute9 = AssertModule<RouteModuleContract<Route9>, Route9>;
+
 // src/routes/hello/route.ts
-type Route0 = typeof import("../../src/routes/hello/route.js");
-export type CheckRoute0 = AssertModule<RouteModuleContract<Route0>, Route0>;
+type Route10 = typeof import("../../src/routes/hello/route.js");
+export type CheckRoute10 = AssertModule<RouteModuleContract<Route10>, Route10>;
+
+// src/routes/vehicle-models/[modelId]/route.ts
+type Route11 = typeof import("../../src/routes/vehicle-models/[modelId]/route.js");
+export type CheckRoute11 = AssertModule<RouteModuleContract<Route11, "modelId">, Route11>;
+
+// src/routes/vehicle-models/route.ts
+type Route12 = typeof import("../../src/routes/vehicle-models/route.js");
+export type CheckRoute12 = AssertModule<RouteModuleContract<Route12>, Route12>;
+
+// src/routes/vehicles/[vehicleId]/retire/route.ts
+type Route13 = typeof import("../../src/routes/vehicles/[vehicleId]/retire/route.js");
+export type CheckRoute13 = AssertModule<RouteModuleContract<Route13, "vehicleId">, Route13>;
+
+// src/routes/vehicles/[vehicleId]/route.ts
+type Route14 = typeof import("../../src/routes/vehicles/[vehicleId]/route.js");
+export type CheckRoute14 = AssertModule<RouteModuleContract<Route14, "vehicleId">, Route14>;
+
+// src/routes/vehicles/[vehicleId]/status/route.ts
+type Route15 = typeof import("../../src/routes/vehicles/[vehicleId]/status/route.js");
+export type CheckRoute15 = AssertModule<RouteModuleContract<Route15, "vehicleId">, Route15>;
+
+// src/routes/vehicles/route.ts
+type Route16 = typeof import("../../src/routes/vehicles/route.js");
+export type CheckRoute16 = AssertModule<RouteModuleContract<Route16>, Route16>;
 
 export {};
