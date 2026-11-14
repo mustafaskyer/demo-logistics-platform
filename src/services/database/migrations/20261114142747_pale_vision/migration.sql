@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "driver_org_user_idx" ON "driver" ("organizationId","userId") WHERE "userId" is not null;
