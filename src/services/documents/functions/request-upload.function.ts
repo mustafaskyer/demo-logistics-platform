@@ -58,6 +58,11 @@ export default defineFunction({
         uploadedBy: userId,
       },
     });
-    return { document: toDocument(row), uploadUrl: await context.buckets.files.createWriteUrl(objectKey) };
+    // The signed URL carries the declared type and size, so the store refuses any other upload.
+    const uploadUrl = await context.buckets.files.createWriteUrl(objectKey, {
+      contentType: input.contentType,
+      contentLength: input.sizeBytes,
+    });
+    return { document: toDocument(row), uploadUrl };
   },
 });

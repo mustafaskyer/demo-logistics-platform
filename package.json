@@ -6,7 +6,7 @@
   "scripts": {
     "build": "relkit build",
     "check": "relkit check",
-    "db:generate": "bun --bun drizzle-kit generate",
+    "db:generate": "drizzle-kit generate",
     "db:migrate": "relkit db migrate",
     "dev": "relkit dev",
     "graph": "relkit graph print",
@@ -24,8 +24,9 @@
     "@relkit/local": "0.9.0",
     "@relkit/s3": "0.9.0",
     "@scalar/hono-api-reference": "0.12.9",
-    "better-auth": "1.7.1",
+    "better-auth": "1.7.7",
     "drizzle-orm": "1.0.0-rc.5-169397b",
+    "pg": "8.23.0",
     "relkit": "0.9.0",
     "zod": "4.6.7"
   },

@@ -1,5 +1,5 @@
 import { defineDrizzleService } from "@relkit/drizzle";
-import { drizzle } from "drizzle-orm/bun-sql";
+import { openPostgresDatabase } from "@relkit/drizzle/pg";
 import * as schema from "./schema/index.js";
 
 export default defineDrizzleService({
@@ -7,7 +7,7 @@ export default defineDrizzleService({
   client: ({ env }) => {
     const url = env.DATABASE_URL;
     if (!url) throw new Error("DATABASE_URL is required");
-    return drizzle.postgres(url);
+    return openPostgresDatabase(url);
   },
-  dispose: (database) => database.$client.close(),
+  dispose: (database) => database.$client.end(),
 });

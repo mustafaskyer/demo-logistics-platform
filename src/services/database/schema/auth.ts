@@ -30,7 +30,6 @@ export const account = pgTable(
   {
     id: text().primaryKey(),
     accountId: text().notNull(),
-    issuer: text().notNull(),
     providerId: text().notNull(),
     userId: text().notNull(),
     accessToken: text(),
@@ -42,7 +41,6 @@ export const account = pgTable(
     password: text(),
     ...timestamps,
   },
-  (table) => [uniqueIndex("account_issuer_account_id").on(table.issuer, table.accountId)],
 );
 
 export const verification = pgTable("verification", {
