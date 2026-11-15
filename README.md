@@ -133,6 +133,12 @@ client meets them.
 comparison of two runs (`compare.mjs`) and a walk of the Inspector's pages (`inspector-walk.mjs`, needs
 Playwright). It creates throwaway companies and users, so point it at a development database.
 
+[docs/api-validation-checklist.md](docs/api-validation-checklist.md) lists every API (the 25 routes, the
+Better Auth endpoints the app uses, the upload flow, the event reaction, the realtime channel over HTTP and
+WebSocket, and the system routes) as items that can be run and validated one by one on Node and on Bun.
+`scripts/checklist/` holds its helpers: `setup-actors.sh` (one company with all five roles, a second company,
+a user without one), `lib.sh` (`call`, `code`, `json`, `sql`) and `realtime.mjs` (subscribe as an actor).
+
 ## Before deploying
 
 `npm run build` currently **fails by design**: the bucket profile is the Docker S3 used for development, and
