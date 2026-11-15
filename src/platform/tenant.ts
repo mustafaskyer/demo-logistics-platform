@@ -47,8 +47,9 @@ export function definedOnly<T extends Record<string, unknown>>(
 export function constraintViolation(error: unknown): { kind: "unique" | "foreign-key"; name: string } | null {
   for (let current: unknown = error, depth = 0; current && depth < 4; depth += 1) {
     const e = current as { code?: unknown; errno?: unknown; constraint?: unknown; constraintName?: unknown; cause?: unknown };
-    const code = String(e.code ?? e.errno ?? "");
-    if (code === "23505" || code === "23503") {
+    // node-postgres puts the SQLSTATE in `code`; Bun's client puts it in `errno` beside a generic `code`.
+    const code = [e.code, e.errno].map((value) => String(value ?? "")).find((value) => value === "23505" || value === "23503");
+    if (code !== undefined) {
       const name = String(e.constraint ?? e.constraintName ?? "");
       return { kind: code === "23505" ? "unique" : "foreign-key", name };
     }

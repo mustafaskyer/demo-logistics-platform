@@ -21,6 +21,7 @@ export default defineFunction({
     const current = await context.database.vehicle.findOne({ where: { id: vehicleId, organizationId } });
     if (current === null) return vehicleNotFound.create({ vehicleId });
     if (current.status === "retired") return invalidTransition.create({ from: "retired", to: "retired" });
+    // Retirement wins over a concurrent status change: it does not depend on the status that was read.
     const updated = await context.database.vehicle.update({
       where: { id: vehicleId, organizationId },
       data: { status: "retired", updatedAt: new Date() },

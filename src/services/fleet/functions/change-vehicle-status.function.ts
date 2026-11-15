@@ -23,11 +23,16 @@ export default defineFunction({
     if (current.status === "retired" || current.status === status) {
       return invalidTransition.create({ from: current.status, to: status });
     }
+    // Only from the status that was read: a concurrent change (a retirement above all) must not be undone.
     const updated = await context.database.vehicle.update({
-      where: { id: vehicleId, organizationId },
+      where: { id: vehicleId, organizationId, status: current.status },
       data: { status, updatedAt: new Date() },
     });
-    if (updated === null) return vehicleNotFound.create({ vehicleId });
+    if (updated === null) {
+      const latest = await context.database.vehicle.findOne({ where: { id: vehicleId, organizationId } });
+      if (latest === null) return vehicleNotFound.create({ vehicleId });
+      return invalidTransition.create({ from: latest.status, to: status });
+    }
     await context.events.vehicleStatusChanged.publish({
       organizationId,
       vehicleId,
