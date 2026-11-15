@@ -96,12 +96,14 @@ describe("document lifecycle", () => {
     expect([result.status, result.body.code]).toEqual([409, "documents.upload-missing"]);
   });
 
-  test("a file whose size differs from the declaration is discarded", async () => {
+  test("the store refuses a file whose size differs from the declaration", async () => {
     const requested = await request(owner, { sizeBytes: 10 });
-    await upload(requested.body.uploadUrl, pdf("this is much longer than ten bytes"));
+    // The upload URL is signed for the declared type and length, so the store refuses the file
+    // itself and nothing is left to confirm.
+    const refused = await upload(requested.body.uploadUrl, pdf("this is much longer than ten bytes"));
+    expect(refused.ok).toBe(false);
     const result = await owner.post(`/documents/${requested.body.document.id}/confirm`);
-    expect([result.status, result.body.code]).toEqual([422, "documents.upload-size-mismatch"]);
-    expect((await owner.post(`/documents/${requested.body.document.id}/confirm`)).status).toBe(404);
+    expect([result.status, result.body.code]).toEqual([409, "documents.upload-missing"]);
   });
 });
 
