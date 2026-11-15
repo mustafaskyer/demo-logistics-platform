@@ -1,8 +1,9 @@
 /**
  * Integration harness. Runs the real application (`relkit dev`) against a throwaway Postgres
  * database migrated with the project's own migrations, so access rules, cookies, middleware and
- * HTTP mapping are exercised exactly as in production. (`@relkit/testing`'s in-process HTTP client
- * does not evaluate function access rules in 0.9.0.)
+ * HTTP mapping are exercised exactly as in production. (This harness was written on RelKit 0.9.0,
+ * whose in-process HTTP client in `@relkit/testing` skipped function access rules; 0.9.1 evaluates
+ * them, but the served application still covers the cookies, `Origin` checks and HTTP mapping.)
  *
  * One server is shared by all test files in a run; every test creates its own companies and users.
  */
