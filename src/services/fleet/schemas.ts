@@ -1,12 +1,13 @@
 /** Shared fleet contracts and row mappers (plain helpers, not discovered descriptors). */
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 
 export const bodyTypes = ["van", "pickup", "box_truck", "flatbed", "refrigerated", "tanker", "semi_trailer", "motorcycle"] as const;
 export const vehicleStatuses = ["active", "maintenance", "retired"] as const;
 
 const currentYear = new Date().getFullYear();
 
-export const plateSchema = z.string().trim().min(2).max(16);
+export const plateSchema = text().trim().min(2).max(16);
 
 /** Canonical plate form: upper case with single spaces. Applied by handlers, not by the schema. */
 export const normalizePlate = (value: string): string => value.toUpperCase().replace(/\s+/g, " ");

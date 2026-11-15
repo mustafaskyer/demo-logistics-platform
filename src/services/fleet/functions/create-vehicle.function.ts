@@ -1,6 +1,7 @@
 /** Registers a vehicle of one of the company's models. Plate and VIN are unique per company. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { constraintViolation, currentTenant } from "@app/platform/tenant.js";
 import modelNotFound from "@app/services/fleet/errors/model-not-found.error.js";
 import plateTaken from "@app/services/fleet/errors/plate-taken.error.js";
@@ -11,7 +12,7 @@ export default defineFunction({
   id: "fleet.create-vehicle",
   access: { permissions: ["vehicle:create"] },
   input: z.object({
-    modelId: z.string().min(1),
+    modelId: text().min(1),
     plate: plateSchema,
     vin: vinSchema.optional(),
     year: yearSchema,

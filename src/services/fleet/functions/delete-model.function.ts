@@ -1,6 +1,7 @@
 /** Deletes a vehicle model that no vehicle uses. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { constraintViolation, currentTenant } from "@app/platform/tenant.js";
 import modelInUse from "@app/services/fleet/errors/model-in-use.error.js";
 import modelNotFound from "@app/services/fleet/errors/model-not-found.error.js";
@@ -8,7 +9,7 @@ import modelNotFound from "@app/services/fleet/errors/model-not-found.error.js";
 export default defineFunction({
   id: "fleet.delete-model",
   access: { permissions: ["vehicleModel:delete"] },
-  input: z.object({ modelId: z.string().min(1) }),
+  input: z.object({ modelId: text().min(1) }),
   output: z.object({ deleted: z.literal(true) }),
   errors: [modelNotFound, modelInUse],
   handler: async ({ modelId }, context) => {

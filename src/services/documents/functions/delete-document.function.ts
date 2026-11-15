@@ -1,6 +1,7 @@
 /** Deletes a document and its stored file. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { currentTenant } from "@app/platform/tenant.js";
 import files from "@app/services/documents/buckets/files.bucket.js";
 import documentNotFound from "@app/services/documents/errors/document-not-found.error.js";
@@ -8,7 +9,7 @@ import documentNotFound from "@app/services/documents/errors/document-not-found.
 export default defineFunction({
   id: "documents.delete-document",
   access: { permissions: ["document:delete"] },
-  input: z.object({ documentId: z.string().min(1) }),
+  input: z.object({ documentId: text().min(1) }),
   output: z.object({ deleted: z.literal(true) }),
   errors: [documentNotFound],
   dependencies: { buckets: { files } },

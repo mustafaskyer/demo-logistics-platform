@@ -1,6 +1,7 @@
 /** Reactivates an inactive driver whose license is still valid. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { currentTenant } from "@app/platform/tenant.js";
 import driverNotFound from "@app/services/drivers/errors/driver-not-found.error.js";
 import licenseExpired from "@app/services/drivers/errors/license-expired.error.js";
@@ -9,7 +10,7 @@ import { driverSchema, licenseValidOn, toDriver } from "@app/services/drivers/sc
 export default defineFunction({
   id: "drivers.activate-driver",
   access: { permissions: ["driver:update"] },
-  input: z.object({ driverId: z.string().min(1) }),
+  input: z.object({ driverId: text().min(1) }),
   output: driverSchema,
   errors: [driverNotFound, licenseExpired],
   handler: async ({ driverId }, context) => {

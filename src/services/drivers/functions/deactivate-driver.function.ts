@@ -1,6 +1,7 @@
 /** Deactivates a driver and releases their vehicle, if any. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { currentTenant } from "@app/platform/tenant.js";
 import driverNotFound from "@app/services/drivers/errors/driver-not-found.error.js";
 import { driverSchema, toDriver } from "@app/services/drivers/schemas.js";
@@ -8,7 +9,7 @@ import { driverSchema, toDriver } from "@app/services/drivers/schemas.js";
 export default defineFunction({
   id: "drivers.deactivate-driver",
   access: { permissions: ["driver:delete"] },
-  input: z.object({ driverId: z.string().min(1) }),
+  input: z.object({ driverId: text().min(1) }),
   output: driverSchema,
   errors: [driverNotFound],
   handler: async ({ driverId }, context) => {

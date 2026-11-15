@@ -160,11 +160,13 @@ export async function lifecycleGroup(audit, ctx, fx) {
   await s({ name: "documents/owner-not-found", method: "POST", path: "/documents", body: { ownerType: "driver", ownerId: "does-not-exist", kind: "license", filename: "x.pdf", contentType: "application/pdf", sizeBytes: 10 }, expect: 404, verify: code("documents.owner-not-found") });
   await s({ name: "documents/owner-vehicle-not-found", method: "POST", path: "/documents", body: { ownerType: "vehicle", ownerId: "does-not-exist", kind: "license", filename: "x.pdf", contentType: "application/pdf", sizeBytes: 10 }, expect: 404, verify: code("documents.owner-not-found") });
 
-  // size mismatch: declared 10, uploaded more -> confirm discards
+  // size mismatch: declared 10, uploaded more -> the signed URL carries the declared size, so the store refuses the
+  // upload and nothing is stored (before the application passed the size to createWriteUrl, the store accepted it
+  // and confirm discarded the document with documents.upload-size-mismatch)
   const mm = await s({ name: "documents/size-mismatch-request", method: "POST", path: "/documents", body: { ownerType: "driver", ownerId: docDriver?.id, kind: "other", filename: "big.pdf", contentType: "application/pdf", sizeBytes: 10 }, expect: 201 });
-  await s({ name: "documents/size-mismatch-put", method: "PUT", path: mm.body?.uploadUrl ?? "http://invalid.invalid/", absolute: true, origin: false, rawBody: fx.pdf("this is much longer than ten bytes"), headers: { "content-type": "application/pdf" }, expect: [200, 204] });
-  await s({ name: "documents/size-mismatch-confirm", method: "POST", path: `/documents/${mm.body?.document?.id}/confirm`, expect: 422, verify: code("documents.upload-size-mismatch") });
-  await s({ name: "documents/size-mismatch-confirm-again", method: "POST", path: `/documents/${mm.body?.document?.id}/confirm`, expect: 404, verify: code("documents.document-not-found"), note: "mismatch discards the row" });
+  await s({ name: "documents/size-mismatch-put", method: "PUT", path: mm.body?.uploadUrl ?? "http://invalid.invalid/", absolute: true, origin: false, rawBody: fx.pdf("this is much longer than ten bytes"), headers: { "content-type": "application/pdf" }, expect: [400, 403], note: "the signed URL binds the declared size" });
+  await s({ name: "documents/size-mismatch-confirm", method: "POST", path: `/documents/${mm.body?.document?.id}/confirm`, expect: 409, verify: code("documents.upload-missing") });
+  await s({ name: "documents/size-mismatch-confirm-again", method: "POST", path: `/documents/${mm.body?.document?.id}/confirm`, expect: 409, verify: code("documents.upload-missing"), note: "a refused upload leaves the document pending" });
 
   // wrong content type on the signed upload
   const ct = await s({ name: "documents/wrong-content-type-request", method: "POST", path: "/documents", body: { ownerType: "driver", ownerId: docDriver?.id, kind: "other", filename: "pic.png", contentType: "image/png", sizeBytes: bytes.byteLength }, expect: 201 });

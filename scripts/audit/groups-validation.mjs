@@ -161,7 +161,7 @@ export async function validationGroup(audit, ctx, fx) {
   for (const [key, method, path, body] of idRoutes) {
     for (const [id, idLabel] of ids) {
       const long = idLabel === "5000chars";
-      await s({ name: `${key} | id=${idLabel}`, method, path: path(id), body, expect: long ? [404, 414, 431, 400] : idLabel === "nul" ? [400, 404] : 404, check: "a client error, never 5xx; 404 for an id that matches nothing",
+      await s({ name: `${key} | id=${idLabel}`, method, path: path(id), body, expect: long ? [404, 414, 431, 400] : idLabel === "nul" ? [400, 404, 422] : 404, check: "a client error, never 5xx; 404 for an id that matches nothing (422 when the id itself is invalid input)",
         verify: (r) => (r.status >= 500 ? `server error ${r.status}: ${r.text.slice(0, 120)}` : true) });
     }
   }

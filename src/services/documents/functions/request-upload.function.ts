@@ -1,6 +1,7 @@
 /** Starts a document upload: records it as pending and returns a short-lived signed URL to PUT the file to. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { currentTenant } from "@app/platform/tenant.js";
 import drivers from "@app/services/drivers/service.js";
 import fleet from "@app/services/fleet/service.js";
@@ -21,9 +22,9 @@ export default defineFunction({
   access: { permissions: ["document:create"] },
   input: z.object({
     ownerType: z.enum(ownerTypes),
-    ownerId: z.string().min(1),
+    ownerId: text().min(1),
     kind: z.enum(documentKinds),
-    filename: z.string().trim().min(1).max(200),
+    filename: text().trim().min(1).max(200),
     contentType: z.enum(contentTypes),
     sizeBytes: z.number().int().min(1).max(maxDocumentBytes),
   }),

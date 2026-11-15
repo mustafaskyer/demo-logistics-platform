@@ -1,6 +1,7 @@
 /** Registers a driver profile. The license must be valid today and unique within the company. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { constraintViolation, currentTenant } from "@app/platform/tenant.js";
 import licenseExpired from "@app/services/drivers/errors/license-expired.error.js";
 import licenseTaken from "@app/services/drivers/errors/license-taken.error.js";
@@ -20,12 +21,12 @@ export default defineFunction({
   id: "drivers.create-driver",
   access: { permissions: ["driver:create"] },
   input: z.object({
-    fullName: z.string().trim().min(2).max(120),
+    fullName: text().trim().min(2).max(120),
     phone: phoneSchema,
     licenseNumber: licenseNumberSchema,
     licenseClass: licenseClassSchema,
     licenseExpiresOn: licenseExpiresOnSchema,
-    userId: z.string().min(1).optional(),
+    userId: text().min(1).optional(),
   }),
   output: driverSchema,
   errors: [licenseExpired, licenseTaken, userNotInCompany, userAlreadyDriver],

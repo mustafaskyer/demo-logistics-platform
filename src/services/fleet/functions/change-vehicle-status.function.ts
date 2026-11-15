@@ -1,6 +1,7 @@
 /** Moves a vehicle between active and maintenance, then announces the change. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { currentTenant } from "@app/platform/tenant.js";
 import invalidTransition from "@app/services/fleet/errors/invalid-status-transition.error.js";
 import vehicleNotFound from "@app/services/fleet/errors/vehicle-not-found.error.js";
@@ -11,7 +12,7 @@ import { toVehicle, vehicleSchema } from "@app/services/fleet/schemas.js";
 export default defineFunction({
   id: "fleet.change-vehicle-status",
   access: { permissions: ["vehicle:changeStatus"] },
-  input: z.object({ vehicleId: z.string().min(1), status: z.enum(["active", "maintenance"]) }),
+  input: z.object({ vehicleId: text().min(1), status: z.enum(["active", "maintenance"]) }),
   output: vehicleSchema,
   errors: [vehicleNotFound, invalidTransition],
   dependencies: { events: { vehicleStatusChanged }, channels: { vehicleStatus } },

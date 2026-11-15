@@ -1,6 +1,7 @@
 /** Updates a driver's contact details or license. Activation state has its own functions. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { constraintViolation, currentTenant, definedOnly } from "@app/platform/tenant.js";
 import driverNotFound from "@app/services/drivers/errors/driver-not-found.error.js";
 import licenseExpired from "@app/services/drivers/errors/license-expired.error.js";
@@ -19,8 +20,8 @@ export default defineFunction({
   id: "drivers.update-driver",
   access: { permissions: ["driver:update"] },
   input: z.object({
-    driverId: z.string().min(1),
-    fullName: z.string().trim().min(2).max(120).optional(),
+    driverId: text().min(1),
+    fullName: text().trim().min(2).max(120).optional(),
     phone: phoneSchema.optional(),
     licenseNumber: licenseNumberSchema.optional(),
     licenseClass: licenseClassSchema.optional(),

@@ -1,6 +1,7 @@
 /** Releases the driver's current vehicle. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { currentTenant } from "@app/platform/tenant.js";
 import noOpenAssignment from "@app/services/drivers/errors/no-open-assignment.error.js";
 import { assignmentSchema, toAssignment } from "@app/services/drivers/schemas.js";
@@ -8,7 +9,7 @@ import { assignmentSchema, toAssignment } from "@app/services/drivers/schemas.js
 export default defineFunction({
   id: "drivers.unassign-vehicle",
   access: { permissions: ["assignment:delete"] },
-  input: z.object({ driverId: z.string().min(1) }),
+  input: z.object({ driverId: text().min(1) }),
   output: assignmentSchema,
   errors: [noOpenAssignment],
   handler: async ({ driverId }, context) => {

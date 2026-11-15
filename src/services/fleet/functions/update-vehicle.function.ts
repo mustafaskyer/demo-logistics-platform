@@ -1,6 +1,7 @@
 /** Updates a vehicle's model, plate, VIN or year. Status changes use their own functions. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { constraintViolation, currentTenant, definedOnly } from "@app/platform/tenant.js";
 import modelNotFound from "@app/services/fleet/errors/model-not-found.error.js";
 import plateTaken from "@app/services/fleet/errors/plate-taken.error.js";
@@ -13,8 +14,8 @@ export default defineFunction({
   id: "fleet.update-vehicle",
   access: { permissions: ["vehicle:update"] },
   input: z.object({
-    vehicleId: z.string().min(1),
-    modelId: z.string().min(1).optional(),
+    vehicleId: text().min(1),
+    modelId: text().min(1).optional(),
     plate: plateSchema.optional(),
     vin: vinSchema.optional(),
     year: yearSchema.optional(),

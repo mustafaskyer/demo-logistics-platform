@@ -1,6 +1,7 @@
 /** Lists the caller's company vehicles, optionally filtered by status or model. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { currentTenant } from "@app/platform/tenant.js";
 import { pageInput, toVehicle, vehicleSchema, vehicleStatuses } from "@app/services/fleet/schemas.js";
 
@@ -9,7 +10,7 @@ export default defineFunction({
   access: { permissions: ["vehicle:read"] },
   input: z.object({
     status: z.enum(vehicleStatuses).optional(),
-    modelId: z.string().min(1).optional(),
+    modelId: text().min(1).optional(),
     ...pageInput,
   }),
   output: z.object({ items: z.array(vehicleSchema), limit: z.number(), offset: z.number() }),

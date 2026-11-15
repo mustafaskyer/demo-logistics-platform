@@ -1,6 +1,7 @@
 /** Assigns an active vehicle to an active driver. One open assignment per driver and per vehicle. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { constraintViolation, currentTenant } from "@app/platform/tenant.js";
 import fleet from "@app/services/fleet/service.js";
 import driverAlreadyAssigned from "@app/services/drivers/errors/driver-already-assigned.error.js";
@@ -14,7 +15,7 @@ import { assignmentSchema, licenseValidOn, toAssignment } from "@app/services/dr
 export default defineFunction({
   id: "drivers.assign-vehicle",
   access: { permissions: ["assignment:create"] },
-  input: z.object({ driverId: z.string().min(1), vehicleId: z.string().min(1) }),
+  input: z.object({ driverId: text().min(1), vehicleId: text().min(1) }),
   output: assignmentSchema,
   errors: [driverNotFound, driverInactive, licenseExpired, vehicleUnavailable, driverAlreadyAssigned, vehicleAlreadyAssigned],
   dependencies: { functions: { getVehicle: fleet.getVehicle } },

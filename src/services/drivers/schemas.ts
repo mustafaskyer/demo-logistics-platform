@@ -1,5 +1,6 @@
 /** Shared driver contracts and row mappers (plain helpers, not discovered descriptors). */
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 
 export const driverStatuses = ["active", "inactive"] as const;
 
@@ -10,8 +11,8 @@ const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD").refine
 
 export const licenseExpiresOnSchema = isoDate;
 export const phoneSchema = z.string().trim().regex(/^\+?[0-9 ()-]{7,20}$/, "Enter a valid phone number");
-export const licenseNumberSchema = z.string().trim().toUpperCase().min(4).max(32);
-export const licenseClassSchema = z.string().trim().toUpperCase().min(1).max(8);
+export const licenseNumberSchema = text().trim().toUpperCase().min(4).max(32);
+export const licenseClassSchema = text().trim().toUpperCase().min(1).max(8);
 
 export const driverSchema = z.object({
   id: z.string(),

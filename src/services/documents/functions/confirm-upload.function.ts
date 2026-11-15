@@ -1,6 +1,7 @@
 /** Confirms a finished upload by checking the stored object, then marks the document as uploaded. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { currentTenant } from "@app/platform/tenant.js";
 import files from "@app/services/documents/buckets/files.bucket.js";
 import documentNotFound from "@app/services/documents/errors/document-not-found.error.js";
@@ -11,7 +12,7 @@ import { documentSchema, toDocument } from "@app/services/documents/schemas.js";
 export default defineFunction({
   id: "documents.confirm-upload",
   access: { permissions: ["document:create"] },
-  input: z.object({ documentId: z.string().min(1) }),
+  input: z.object({ documentId: text().min(1) }),
   output: documentSchema,
   errors: [documentNotFound, uploadMissing, uploadSizeMismatch],
   dependencies: { buckets: { files } },

@@ -1,6 +1,7 @@
 /** Updates a vehicle model's name, body type or capacity within the caller's company. */
 import { defineFunction } from "relkit/functions";
 import { z } from "zod";
+import { text } from "@app/platform/text.js";
 import { constraintViolation, currentTenant, definedOnly } from "@app/platform/tenant.js";
 import modelExists from "@app/services/fleet/errors/model-exists.error.js";
 import modelNotFound from "@app/services/fleet/errors/model-not-found.error.js";
@@ -10,9 +11,9 @@ export default defineFunction({
   id: "fleet.update-model",
   access: { permissions: ["vehicleModel:update"] },
   input: z.object({
-    modelId: z.string().min(1),
-    make: z.string().trim().min(1).max(60).optional(),
-    name: z.string().trim().min(1).max(60).optional(),
+    modelId: text().min(1),
+    make: text().trim().min(1).max(60).optional(),
+    name: text().trim().min(1).max(60).optional(),
     bodyType: z.enum(bodyTypes).optional(),
     capacityKg: z.number().int().min(1).max(100_000).optional(),
   }),
