@@ -1,0 +1,14 @@
+allowBuilds:
+  esbuild: false
+minimumReleaseAgeExclude:
+  - '@relkit/better-auth@0.9.3'
+  - '@relkit/cli@0.9.3'
+  - '@relkit/client@0.9.3'
+  - '@relkit/docker@0.9.3'
+  - '@relkit/drizzle@0.9.3'
+  - '@relkit/inspector@0.9.3'
+  - '@relkit/local@0.9.3'
+  - '@relkit/s3@0.9.3'
+  - '@relkit/testing@0.9.3'
+  - create-relkit@0.9.3
+  - relkit@0.9.3
